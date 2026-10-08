@@ -9,6 +9,8 @@ import os
 import re
 import subprocess
 import webbrowser
+import xml.etree.ElementTree as ET
+from zipfile import ZipFile, BadZipFile
 from functools import partial
 from PIL import ImageTk, Image
 try:
@@ -23,6 +25,47 @@ try:
     xml2abcpath = 'import'
 except Exception:
     xml2abcpath = ''
+
+
+def readScoreFile(filename):
+    """Read ABC, MusicXML, or the score inside a compressed MusicXML archive."""
+    if os.path.splitext(filename)[1].lower() == '.mxl':
+        with ZipFile(filename) as archive:
+            try:
+                container = ET.fromstring(archive.read('META-INF/container.xml'))
+            except KeyError:
+                raise ValueError('Compressed MusicXML has no META-INF/container.xml.')
+            roots = [e for e in container.iter()
+                     if e.tag.rsplit('}', 1)[-1] == 'rootfile']
+            score = next((e for e in roots if e.get('media-type') ==
+                          'application/vnd.recordare.musicxml+xml'), None)
+            if score is None and roots:
+                score = roots[0]
+            if score is None or not score.get('full-path'):
+                raise ValueError('Compressed MusicXML does not identify a score file.')
+            try:
+                data = archive.read(score.get('full-path'))
+            except KeyError:
+                raise ValueError('The score file listed in the archive is missing.')
+        root = ET.fromstring(data)
+        if root.tag not in ('score-partwise', 'score-timewise'):
+            raise ValueError('The archive does not contain a MusicXML score.')
+        return ET.tostring(root, encoding='unicode')
+    with open(filename, 'rb') as source:
+        data = source.read()
+    if os.path.splitext(filename)[1].lower() in ('.xml', '.musicxml'):
+        return ET.tostring(ET.fromstring(data), encoding='unicode')
+    return data.decode('utf-8-sig')
+
+
+def isMusicXML(text):
+    text = text.lstrip('\ufeff \t\r\n')
+    if not text.startswith('<'):
+        return False
+    root = ET.fromstring(text)
+    if root.tag not in ('score-partwise', 'score-timewise'):
+        raise ValueError('XML input is not a MusicXML score.')
+    return True
 
 
 class abc2xmlGUI:
@@ -215,11 +258,16 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
                     proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                             stderr=subprocess.PIPE)
                 out, msg = proc.communicate(self.txt.encode('utf-8'))
+                if proc.returncode:
+                    raise ValueError(msg.decode('utf-8', errors='replace') or
+                                     'Converter exited with code %s.' % proc.returncode)
                 try:
                     out = out.decode('utf-8').replace("\r\n", "\n")
                 except UnicodeDecodeError:
                     out = out.decode('latin-1').replace("\r\n", "\n")
                 msg = msg.decode('utf-8').replace("\r\n", "\n")
+            if not out.strip():
+                raise ValueError(msg or 'Converter produced no output.')
             self.saveFile(out)
             if self.messages == 'on' and self.filename != "":
                 msg = msg.replace(". ", ".\n")
@@ -277,8 +325,12 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
             self.inDir = self.folder
         filename = filedialog.askopenfilename(initialdir=self.inDir, title=_("Select file"), filetypes=self.fileTypes)
         if filename != "":
-            with open(filename, 'r', encoding='utf-8') as self.fl:
-                text = self.fl.read()
+            try:
+                text = readScoreFile(filename)
+            except (OSError, ValueError, BadZipFile, ET.ParseError) as error:
+                self.userInfo('showerror', _('Cannot open score:') + '\n' + str(error))
+                return
+            self.sourceFilename = filename
             self.abcText.delete('1.0', tk.END)
             self.abcText.insert(tk.END, text)
             
@@ -304,6 +356,7 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
             if lb == "-b":
                 lb = "-x"
             pIn = "-i"
+            cmdList.append("--abcjs")
         cmdList.extend([lb, pIn])
         return cmdList
 
@@ -337,18 +390,17 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
     def saveFile(self, content):
         ifile = ''
         idir = ''
-        #if self.fl and self.fl != '':
-        if hasattr(self, 'fl') and self.fl != '':
-            filepart = self.fl.name.split('/')[-1]
+        if getattr(self, 'sourceFilename', ''):
+            filepart = os.path.basename(self.sourceFilename)
             if (self.outDir == 'in') or (self.outDir == ''):
                 if self.inDir == '':
                     idir = self.folder
                 else:
-                    idir = self.fl.name.replace('/' + filepart, '')
+                    idir = os.path.dirname(self.sourceFilename)
             else:
                 idir = self.outDir
-            ifile = filepart.split('.')[0]
-        if content.startswith('<?xml'):
+            ifile = os.path.splitext(filepart)[0]
+        if isMusicXML(content):
             outFiles = self.fileTypesX
             if ifile != "":
                 ifile += ".xml"
@@ -391,10 +443,13 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
         if (self.txt != "" and
             self.txt != self.installAbcText.strip() and
             self.txt != self.infoAbcText.strip()):
-            if self.txt.startswith('<?xml'): # Check if xml or abc
-                self.xml2abc()
-            else:
-                self.abc2xml()
+            try:
+                if isMusicXML(self.txt):
+                    self.xml2abc()
+                else:
+                    self.abc2xml()
+            except Exception as error:
+                self.userInfo('showerror', _('Conversion failed:') + '\n' + str(error))
         else:
             infotext = _("No abc or XML to convert.")
             self.userInfo('showwarning', infotext)
@@ -449,7 +504,7 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
         if (self.pathXml2Abc != ''):
             if (self.pathXml2Abc == 'import'): # If imported run as module, else start process
                 lb = self.scoreLineBreak.get() == '-b'  # need a boolean for option x
-                out, msg = xml2abc.vertaal(self.txt, x=lb)
+                out, msg = xml2abc.vertaal(self.txt, x=lb, abcjs=True)
             else:
                 cmdList = self.prepCmdList(self.pathXml2Abc)
                 if (os.name == "nt"):
@@ -462,11 +517,16 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
                     proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                             stderr=subprocess.PIPE)
                 out, msg = proc.communicate(self.txt.encode('utf-8'))
+                if proc.returncode:
+                    raise ValueError(msg.decode('utf-8', errors='replace') or
+                                     'Converter exited with code %s.' % proc.returncode)
                 try:
                     out = out.decode('utf-8').replace("\r\n", "\n")
                 except UnicodeDecodeError:
                     out = out.decode('latin-1').replace("\r\n", "\n")
                 msg = msg.decode('utf-8').replace("\r\n", "\n")
+            if not out.strip():
+                raise ValueError(msg or 'Converter produced no output.')
             self.saveFile(out)
             if self.messages == 'on' and self.filename != "":
                 msg = msg.replace(". ", ".\n")
@@ -487,4 +547,5 @@ class GUIButton(tk.Button):
         self.grid(row=1, column = self.col, sticky=tk.W+tk.E, padx=5, pady=(0,10))
 
 
-abc2xmlGUI()
+if __name__ == '__main__':
+    abc2xmlGUI()

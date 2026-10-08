@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "description": "Browser harness for the converter's abcjs end-to-end checks",
+  "devDependencies": { "playwright": "1.64.0" }
+}

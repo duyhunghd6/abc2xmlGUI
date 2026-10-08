@@ -1,0 +1,25 @@
+name: ABC output validation
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  conversion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch and build pinned validators
+        run: python3 tests/e2e/setup.py
+      - name: Install Chromium system libraries
+        working-directory: tests/e2e
+        run: npx --no-install playwright install-deps chromium
+      - name: Unit regressions
+        run: python3 -m unittest discover -s tests -v
+      - name: Convert, validate, and render
+        run: python3 tests/e2e/test_conversion.py

@@ -1,0 +1,10 @@
+{
+  "abcmidi": {
+    "url": "https://github.com/sshlien/abcmidi.git",
+    "revision": "333ca1566c9682df3362d3d0f9a7d2ab431a26fd"
+  },
+  "abcjs": {
+    "url": "https://github.com/paulrosen/abcjs.git",
+    "revision": "914065f99e2eb0c45b046d698b939bc71a8b8d40"
+  }
+}

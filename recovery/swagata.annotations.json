@@ -1,0 +1,423 @@
+{
+  "source_sha256": "2ec7d69b7f15349270d3385b85232dcf2bcac049b924369a0827d39a5677ba06",
+  "part": "P1",
+  "provenance": "Manual transcription from Swagata Swagatam, Hindi 10 Audiveris archive, sheet#1/BINARY.png, printed page 209. Printed Gm/Eb alternatives remain one Gm(Eb) label at the first note, not a chord change on the next note. Parenthesized Gm alternatives in measures 9 and 17 are transcribed as Gm at their displayed onset; their optional status is not encoded. Diagram fingerings are not transcribed. OMR melody and ties are retained; measure 13 ji/Ke articulation requires source review.",
+  "measures": [
+    {
+      "number": 1,
+      "lyrics": [
+        "Swa-",
+        null,
+        "gat.",
+        null,
+        "A-",
+        null,
+        "gat.",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 2,
+      "lyrics": [
+        "Swa-",
+        null,
+        null,
+        "ga-",
+        "tam",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Dm"
+        ],
+        [
+          5,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 3,
+      "lyrics": [
+        "Ham.",
+        null,
+        "Sab.",
+        null,
+        "Kar.",
+        null,
+        "te"
+      ],
+      "chords": [
+        [
+          1,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 4,
+      "lyrics": [
+        "Swa-",
+        null,
+        null,
+        "ga-",
+        "tam",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Dm"
+        ],
+        [
+          5,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 5,
+      "lyrics": [
+        "Aj.",
+        null,
+        null,
+        "Ha-",
+        "ma-",
+        null,
+        "re"
+      ],
+      "chords": [
+        [
+          1,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 6,
+      "lyrics": [
+        "Bich.",
+        null,
+        null,
+        "Pa-",
+        "dha-",
+        null,
+        "re",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Dm"
+        ],
+        [
+          7,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 7,
+      "lyrics": [
+        "Shri",
+        null,
+        "Ma-",
+        "ta-",
+        null,
+        "ji"
+      ],
+      "chords": [
+        [
+          1,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 8,
+      "lyrics": [
+        "Ap.",
+        null,
+        null,
+        "Hi",
+        "Ta-",
+        null,
+        "re",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Dm"
+        ],
+        [
+          5,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 9,
+      "lyrics": [
+        "Jhum.",
+        "Jhum.",
+        "Ke",
+        null,
+        "Jhum.",
+        "Jhum.",
+        "Ke",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Bb"
+        ],
+        [
+          2,
+          "Gm"
+        ],
+        [
+          5,
+          "F"
+        ]
+      ]
+    },
+    {
+      "number": 10,
+      "lyrics": [
+        "Kar.",
+        null,
+        "te",
+        "Hain",
+        "Gan",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Gm(Eb)"
+        ],
+        [
+          5,
+          "D"
+        ]
+      ]
+    },
+    {
+      "number": 11,
+      "lyrics": [
+        "Swa-",
+        null,
+        "gat.",
+        null,
+        "A-",
+        null,
+        "gat.",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 12,
+      "lyrics": [
+        "Swa-",
+        null,
+        null,
+        "ga-",
+        "tam",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Dm"
+        ],
+        [
+          5,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 13,
+      "lyrics": [
+        "Pu-",
+        "jya-",
+        "var.",
+        null,
+        "Ma-",
+        "ta-",
+        "ji",
+        "Ke"
+      ],
+      "chords": [
+        [
+          1,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 14,
+      "lyrics": [
+        "Dar.",
+        null,
+        "shan.",
+        null,
+        "Pa-",
+        null,
+        "kar"
+      ],
+      "chords": [
+        [
+          1,
+          "Dm"
+        ],
+        [
+          7,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 15,
+      "lyrics": [
+        "Kar.",
+        null,
+        "te",
+        "Hai",
+        "Swa-",
+        null,
+        "gat.",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 16,
+      "lyrics": [
+        "Dil.",
+        null,
+        "Se",
+        null,
+        "Ga-",
+        null,
+        "kar"
+      ],
+      "chords": [
+        [
+          1,
+          "Dm"
+        ],
+        [
+          7,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 17,
+      "lyrics": [
+        "Prem",
+        "Phu-",
+        "lon",
+        "Ki",
+        "Ma-",
+        "la"
+      ],
+      "chords": [
+        [
+          1,
+          "Bb"
+        ],
+        [
+          2,
+          "Gm"
+        ],
+        [
+          5,
+          "F"
+        ]
+      ]
+    },
+    {
+      "number": 18,
+      "lyrics": [
+        "Pah.",
+        null,
+        "na-",
+        "te",
+        "Hain",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Gm(Eb)"
+        ],
+        [
+          5,
+          "D"
+        ]
+      ]
+    },
+    {
+      "number": 19,
+      "lyrics": [
+        "Swa-",
+        null,
+        "gat.",
+        null,
+        "A-",
+        null,
+        "gat.",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Gm"
+        ]
+      ]
+    },
+    {
+      "number": 20,
+      "lyrics": [
+        "Swa-",
+        null,
+        null,
+        "ga-",
+        "tam",
+        null
+      ],
+      "chords": [
+        [
+          1,
+          "Dm"
+        ],
+        [
+          5,
+          "Gm"
+        ]
+      ]
+    }
+  ]
+}
